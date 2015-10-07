@@ -64,19 +64,15 @@ trap stop SIGHUP SIGINT SIGTERM
 
 DATA=$(mktemp /vol/data.XXX)
 METADATA=$(mktemp /vol/metadata.XXX)
-mkdir -p /etc/docker/plugins/
-echo "unix:///var/run/convoy/convoy.sock" > /etc/docker/plugins/convoy.spec
-if ! ( [ -f "${DATA}" ] && [ -f "${METADATA}" ] )
-	then
-	dd if=/dev/zero of="${DATA}" count="${DATA_SIZE_MB}" bs=1M
-	dd if=/dev/zero of="${METADATA}" count="${METADATA_SIZE_MB}" bs=1M
-fi
+dd if=/dev/zero of="${DATA}" count="${DATA_SIZE_MB}" bs=1M
+dd if=/dev/zero of="${METADATA}" count="${METADATA_SIZE_MB}" bs=1M
 LOOP_DATA=$(losetup -f)
-#LOOP_DATA=/dev/loop5
 losetup ${LOOP_DATA} "${DATA}"
 LOOP_METADATA=$(losetup -f)
-#LOOP_METADATA=/dev/loop6
 losetup ${LOOP_METADATA} "${METADATA}"
+
+mkdir -p /etc/docker/plugins/
+echo "unix:///var/run/convoy/convoy.sock" > /etc/docker/plugins/convoy.spec
 
 ARGS="daemon --drivers devicemapper --driver-opts dm.datadev=${LOOP_DATA} --driver-opts dm.metadatadev=${LOOP_METADATA}"
 PID_FILE='./pid'
