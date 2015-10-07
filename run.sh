@@ -62,10 +62,22 @@ set_pid() {
 trap stop SIGHUP SIGINT SIGTERM
 #EXIT SIGHUP SIGINT SIGTERM SIGUSR1 SIGUSR2 SIGQUIT
 
+create_loop () {
+    sudo mknod -m660 /dev/loop$1 b 7 8 &&
+    sudo chown root.disk /dev/loop$1 &&
+    sudo chmod 666 /dev/loop$1
+}
+
+for loop in {0..7}
+do
+    create_loop $loop || true
+done
+
 DATA=$(mktemp /vol/data.XXX)
 METADATA=$(mktemp /vol/metadata.XXX)
 dd if=/dev/zero of="${DATA}" count="${DATA_SIZE_MB}" bs=1M
 dd if=/dev/zero of="${METADATA}" count="${METADATA_SIZE_MB}" bs=1M
+
 LOOP_DATA=$(losetup -f)
 losetup ${LOOP_DATA} "${DATA}"
 LOOP_METADATA=$(losetup -f)
