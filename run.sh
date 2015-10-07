@@ -73,10 +73,8 @@ do
     create_loop $loop || true
 done
 
-DATA=$(mktemp /vol/data.XXX)
-METADATA=$(mktemp /vol/metadata.XXX)
-dd if=/dev/zero of="${DATA}" count="${DATA_SIZE_MB}" bs=1M
-dd if=/dev/zero of="${METADATA}" count="${METADATA_SIZE_MB}" bs=1M
+[ -f "$DATA" ] || dd if=/dev/zero of="${DATA}" count="${DATA_SIZE_MB}" bs=1M
+[ -f "$METADATA" ] || dd if=/dev/zero of="${METADATA}" count="${METADATA_SIZE_MB}" bs=1M
 
 LOOP_DATA=$(losetup -f)
 losetup ${LOOP_DATA} "${DATA}"
