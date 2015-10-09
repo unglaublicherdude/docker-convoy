@@ -1,0 +1,13 @@
+convoy:
+ image: carverdamien/convoy
+ privileged: true
+ environment:
+  - VOLUMES=/var/ceph/convoy/volumes
+ volumes:
+  - /var/run/convoy:/var/run/convoy
+  - /etc/docker/plugins:/etc/docker/plugins
+  - /var/lib/convoy/:/var/lib/convoy/
+  - /var/ceph/convoy/volumes:/var/ceph/convoy/volumes
+ labels:
+  uniq: convoyindocker
+  io.rancher.scheduler.affinity:container_label_ne: uniq=convoyindocker
