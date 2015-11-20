@@ -1,5 +1,5 @@
 convoy:
- image: carverdamien/convoy
+ image: ajagnanan/docker-convoy
  privileged: true
  environment:
   - VOLUMES=/var/ceph/convoy/volumes
