@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 set -x -e
 
-[ -n "${VOLUMES}" ]
+VOLUMES=${VOLUMES:-"/share"}
 
 mkdir -p /etc/docker/plugins/
 echo "unix:///var/run/convoy/convoy.sock" > /etc/docker/plugins/convoy.spec
