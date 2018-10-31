@@ -2,14 +2,14 @@ FROM alpine
 
 LABEL maintainer="docker@matthias-simonis.de"
 
-RUN apk update
-RUN apk add -U openssl
-RUN apk add -U wget
+RUN apk update && \
+    apk add -U openssl wget && \
+    rm -rf /var/cache/apk/*
 
-RUN wget https://github.com/rancher/convoy/releases/download/v0.5.1/convoy.tar.gz
-RUN tar xvf convoy.tar.gz
-RUN cp convoy/convoy convoy/convoy-pdata_tools /usr/local/bin/
-RUN rm convoy.tar.gz
+RUN wget https://github.com/rancher/convoy/releases/download/v0.5.1/convoy.tar.gz && \
+    tar xvf convoy.tar.gz && \
+    cp convoy/convoy convoy/convoy-pdata_tools /usr/local/bin/ && \
+    rm convoy.tar.gz
 
 COPY run.sh .
 
